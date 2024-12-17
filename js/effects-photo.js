@@ -1,9 +1,9 @@
 import { imgUploadForm } from './open-form.js';
+import { imgUploadPreview } from './upload-photo.js';
 
 const scale = imgUploadForm.querySelector('.scale');
 
 const scaleValue = scale.querySelector('.scale__control--value');
-const imgUploadPreview = imgUploadForm.querySelector('.img-upload__preview');
 const effectsRadioButtons = imgUploadForm.querySelectorAll('.effects__radio');
 const effectLevelValue = imgUploadForm.querySelector('.effect-level__value');
 const sliderElement = imgUploadForm.querySelector('.effect-level__slider');

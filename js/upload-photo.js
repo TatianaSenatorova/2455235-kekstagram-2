@@ -24,3 +24,6 @@ fileChooser.addEventListener('change', () => {
     showRequestInfoTimeout(ErrorIdTemplates.LOAD_ERROR, 'Неверный тип файла');
   }
 });
+
+
+export {imgPhotoPreview};
