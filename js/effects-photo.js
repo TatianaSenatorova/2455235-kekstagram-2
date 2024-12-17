@@ -1,5 +1,5 @@
 import { imgUploadForm } from './open-form.js';
-import { imgUploadPreview } from './upload-photo.js';
+import { imgPhotoPreview } from './upload-photo.js';
 
 const scale = imgUploadForm.querySelector('.scale');
 
@@ -66,7 +66,7 @@ sliderContainer.classList.add('hidden');
 const changePhotoSize = (action, scaleData) => {
   const newScaleValue =
   action === ScaleAction.INCREASE ? scaleData + SCALE_STEP : scaleData - SCALE_STEP ;
-  imgUploadPreview.style.transform = `scale(${newScaleValue * 0.01})`;
+  imgPhotoPreview.style.transform = `scale(${newScaleValue * 0.01})`;
   scaleValue.setAttribute('value', `${newScaleValue}%`);
 };
 
@@ -104,12 +104,12 @@ const updateSliderData = (effect) => {
 };
 
 const changePhotoStyle = (effect) => {
-  imgUploadPreview.style.filter = `${effect.filter}(${effectLevelValue.value.trim()}${effect.unit})`;
+  imgPhotoPreview.style.filter = `${effect.filter}(${effectLevelValue.value.trim()}${effect.unit})`;
 };
 
 effectsRadioButtons.forEach((button) =>{
   button.addEventListener('change', (evt) => {
-    imgUploadPreview.style.filter = 'unset';
+    imgPhotoPreview.style.filter = 'unset';
     if (evt.target.value !== 'none') {
       sliderContainer.classList.remove('hidden');
       const effect = evt.target.value;
