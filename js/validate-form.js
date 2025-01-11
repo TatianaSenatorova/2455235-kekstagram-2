@@ -66,7 +66,7 @@ const pristine = new Pristine(
   imgUploadForm,
   {
     classTo: 'img-upload__field-wrapper',
-    errorClass: 'img-upload__field-wrapper--error',
+    errorTextClass: 'img-upload__field-wrapper--error',
     errorTextParent: 'img-upload__field-wrapper',
   },
   false
