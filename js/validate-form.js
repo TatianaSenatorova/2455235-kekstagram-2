@@ -26,7 +26,7 @@ const imgHashtags = imgUploadForm.querySelector('.text__hashtags');
 const imgComments = imgUploadForm.querySelector('.text__description');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 
-let hashesArray;
+let hashesArray = [];
 let infoRequestElement;
 
 const HashErrorsText = {
@@ -66,6 +66,7 @@ const validateHashes = (value) => {
 };
 
 const getHashesAmountMessage = () => HashErrorsText.AMOUNT_ERROR;
+console.log(hashesArray.length);
 const validateHashesAmount = () => hashesArray.length <= 5;
 
 const getHashesUniqueMessage = () => HashErrorsText.UNIQUE_ERROR;
