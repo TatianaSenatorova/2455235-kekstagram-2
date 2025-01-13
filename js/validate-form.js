@@ -6,61 +6,34 @@ import { isEscapeKey } from './utils.js';
 
 const MAX_COMMENT_LENGTH = 140;
 const MAX_HASH_LENGTH = 20;
+const MIN_HASH_LENGTH = 2;
 const MAX_NUMBER_HASHES = 5;
 
 const RequestResultTags = {
   ERROR: {
     section: 'error',
     button: 'error__button',
-    inner: 'error__inner'
+    inner: 'error__inner',
   },
   SUCCESS: {
     section: 'success',
     button: 'success__button',
-    inner: 'success__inner'
-  }
+    inner: 'success__inner',
+  },
 };
 
 const imgHashtags = imgUploadForm.querySelector('.text__hashtags');
 const imgComments = imgUploadForm.querySelector('.text__description');
 const submitButton = imgUploadForm.querySelector('.img-upload__submit');
 
-let hashesArray = [];
-let hashErrorMessages = [];
+let hashesArray;
 let infoRequestElement;
 
-const checkHashErrors = () => [
-  {
-    check: hashesArray.some((hash) => hash.slice(1).includes('#')),
-    error: ' хэштеги разделяются пробелами',
-  },
-  {
-    check: hashesArray.some((hash) => hash[0] !== '#'),
-    error: ' хэштег начинается с символа # (решётка)',
-  },
-  {
-    check: hashesArray.some((hash) => hash === '#'),
-    error: ' хеш-тег не может состоять только из одной решётки',
-  },
-  {
-    check: hashesArray.some(
-      (hash) => !/^[a-zа-яё0-9]{1,19}$/i.test(hash.slice(1))
-    ),
-    error: ' строка после решётки должна состоять из букв и чисел',
-  },
-  {
-    check: hashesArray.some((hash) => hash.length > MAX_HASH_LENGTH),
-    error: ` максимальная длина одного хэштега ${MAX_HASH_LENGTH} символов, включая решётку`,
-  },
-  {
-    check: hashesArray.length > MAX_NUMBER_HASHES,
-    error: ` нельзя указать больше ${MAX_NUMBER_HASHES} хэштегов`,
-  },
-  {
-    check: [...new Set(hashesArray)].length !== hashesArray.length,
-    error: ' один и тот же хэштег не может быть использован дважды',
-  },
-];
+const HashErrorsText = {
+  HASH_ERROR: `хэштеги: разделяются пробелами, начинаются с # (решётки), не могут состоять только из решётки, после решётки состоят из букв и чисел, максимальная длина одного хэштега ${MAX_HASH_LENGTH} символов, включая решётку`,
+  AMOUNT_ERROR: ` нельзя указать больше ${MAX_NUMBER_HASHES} хэштегов`,
+  UNIQUE_ERROR: ' один и тот же хэштег не может быть использован дважды',
+};
 
 const pristine = new Pristine(
   imgUploadForm,
@@ -72,50 +45,64 @@ const pristine = new Pristine(
   false
 );
 
-const validateHashtags = (value) => {
-  hashErrorMessages = [];
-  if (!value) {
-    return true;
-  }
-  hashesArray = value.trim().toLowerCase().split(' ').filter(Boolean);
-  checkHashErrors().map((errorHash) => {
-    if (errorHash.check) {
-      hashErrorMessages.push(errorHash.error);
-    }
-    return hashErrorMessages;
-  });
-  return hashErrorMessages.length === 0;
-};
+const validateComment = (value) =>
+  value.length >= 0 && value.length < MAX_COMMENT_LENGTH;
 
-const validateComment = (value) => value.length >= 0 && value.length < MAX_COMMENT_LENGTH;
-
-const commentErrorMassege = () =>
+const getCommentErrorMessage = () =>
   `максимальная длина комментария ${MAX_COMMENT_LENGTH}`;
 
-const hashesErrorText = () => hashErrorMessages;
+const getHashesArray = (value) =>
+  value.trim().toLowerCase().split(' ').filter(Boolean);
 
-pristine.addValidator(imgHashtags, validateHashtags, hashesErrorText);
-pristine.addValidator(imgComments, validateComment, commentErrorMassege);
+const getHashesErrorMessage = () => HashErrorsText.HASH_ERROR;
 
-const blockSubmitButton = () => {
-  submitButton.disabled = true;
+const validateHashes = (value) => {
+  if(!value) {
+    return true;
+  }
+  hashesArray = getHashesArray(value);
+  const regex = new RegExp(`^#[a-zа-яё0-9]{${MIN_HASH_LENGTH - 1},${MAX_HASH_LENGTH}}$`
+  );
+  return hashesArray.every((hash) => regex.test(hash));
 };
 
-const unblockSubmitButton = () => {
-  submitButton.disabled = false;
+const hashesAmountMessage = () => HashErrorsText.AMOUNT_ERROR;
+
+const validateHashesAmount = () => hashesArray.length <= 5;
+
+const hashesUniqueMessage = () => HashErrorsText.UNIQUE_ERROR;
+
+const validateUniqueHashes = () => [...new Set(hashesArray)].length === hashesArray.length;
+
+pristine.addValidator(imgHashtags, validateHashes, getHashesErrorMessage);
+pristine.addValidator(imgHashtags, validateHashesAmount, hashesAmountMessage
+);
+pristine.addValidator(imgHashtags, validateUniqueHashes, hashesUniqueMessage
+);
+pristine.addValidator(imgComments, validateComment, getCommentErrorMessage);
+
+const blockSubmitButton = (isBlocked = true) => {
+  submitButton.disabled = isBlocked;
 };
 
 const checkIsInfo = () => {
   infoRequestElement = infoRequestElement.toUpperCase();
-  return document.querySelector(`.${RequestResultTags[infoRequestElement].section}`);
+  return document.querySelector(
+    `.${RequestResultTags[infoRequestElement].section}`
+  );
 };
 
 const onBodyClick = (evt) => {
   const isInfo = checkIsInfo();
-  if(!isInfo) {
+  if (!isInfo) {
     return;
   }
-  if (evt.target.classList.contains(RequestResultTags[infoRequestElement].button) || !evt.target.classList.contains(RequestResultTags[infoRequestElement].inner)) {
+  if (
+    evt.target.classList.contains(
+      RequestResultTags[infoRequestElement].button
+    ) ||
+    !evt.target.classList.contains(RequestResultTags[infoRequestElement].inner)
+  ) {
     isInfo.remove();
     body.removeEventListener('click', onBodyClick);
   }
@@ -123,10 +110,10 @@ const onBodyClick = (evt) => {
 
 const onBodyKeydown = (evt) => {
   const isInfo = checkIsInfo();
-  if(!isInfo && !isEscapeKey(evt)) {
+  if (!isInfo && !isEscapeKey(evt)) {
     return;
   }
-  if(infoRequestElement.toLowerCase() === 'error') {
+  if (infoRequestElement.toLowerCase() === 'error') {
     evt.stopPropagation();
   }
   isInfo.remove();
@@ -149,9 +136,58 @@ const setUserFormSubmit = (cb) => {
         .then(() => appendInfo(ErrorIdTemplates.SUCCESS))
         .then(() => cb())
         .catch(() => appendInfo(ErrorIdTemplates.SEND_ERROR))
-        .finally(unblockSubmitButton);
+        .finally(() => blockSubmitButton(false));
     }
   });
 };
 
 export { pristine, setUserFormSubmit, imgHashtags };
+
+/*const validateHashtags = (value) => {
+  hashErrorMessages = [];
+  if (!value) {
+    return true;
+  }
+  hashesArray = value.trim().toLowerCase().split(' ').filter(Boolean);
+  checkHashErrors().map((errorHash) => {
+    if (errorHash.check) {
+      hashErrorMessages.push(errorHash.error);
+    }
+    return hashErrorMessages;
+  });
+  return hashErrorMessages.length === 0;
+};*/
+
+/*const checkHashErrors = () => [
+  {
+    check: hashesArray.some((hash) => hash.slice(1).includes('#')),
+    error: ' хэштеги разделяются пробелами',
+  },
+  {
+    check: hashesArray.some((hash) => hash[0] !== '#'),
+    error: ' хэштег начинается с символа # (решётка)',
+  },
+  {
+    check: hashesArray.some((hash) => hash === '#'),
+    error: ' хеш-тег не может состоять только из одной решётки',
+  },
+  {
+    check: hashesArray.some(
+      (hash) => !/^[a-zа-яё0-9]{1,19}$/i.test(hash.slice(1))
+      /\/^#[a-zа-яё0-9]{2,20}$/
+    ),
+    error: ' строка после решётки должна состоять из букв и чисел',
+  },
+  {
+    check: hashesArray.some((hash) => hash.length > MAX_HASH_LENGTH),
+    error: ` максимальная длина одного хэштега ${MAX_HASH_LENGTH} символов, включая решётку`,
+  },
+  {
+    check: hashesArray.length > MAX_NUMBER_HASHES,
+    error: ` нельзя указать больше ${MAX_NUMBER_HASHES} хэштегов`,
+  },
+  {
+    check: [...new Set(hashesArray)].length !== hashesArray.length,
+    error: ' один и тот же хэштег не может быть использован дважды',
+  },
+];*/
