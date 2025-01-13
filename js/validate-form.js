@@ -66,7 +66,6 @@ const validateHashes = (value) => {
 };
 
 const getHashesAmountMessage = () => HashErrorsText.AMOUNT_ERROR;
-console.log(hashesArray.length);
 const validateHashesAmount = () => hashesArray.length <= 5;
 
 const getHashesUniqueMessage = () => HashErrorsText.UNIQUE_ERROR;
@@ -138,52 +137,3 @@ const setUserFormSubmit = (cb) => {
 };
 
 export { pristine, setUserFormSubmit, imgHashtags };
-
-/*const validateHashtags = (value) => {
-  hashErrorMessages = [];
-  if (!value) {
-    return true;
-  }
-  hashesArray = value.trim().toLowerCase().split(' ').filter(Boolean);
-  checkHashErrors().map((errorHash) => {
-    if (errorHash.check) {
-      hashErrorMessages.push(errorHash.error);
-    }
-    return hashErrorMessages;
-  });
-  return hashErrorMessages.length === 0;
-};*/
-
-/*const checkHashErrors = () => [
-  {
-    check: hashesArray.some((hash) => hash.slice(1).includes('#')),
-    error: ' хэштеги разделяются пробелами',
-  },
-  {
-    check: hashesArray.some((hash) => hash[0] !== '#'),
-    error: ' хэштег начинается с символа # (решётка)',
-  },
-  {
-    check: hashesArray.some((hash) => hash === '#'),
-    error: ' хеш-тег не может состоять только из одной решётки',
-  },
-  {
-    check: hashesArray.some(
-      (hash) => !/^[a-zа-яё0-9]{1,19}$/i.test(hash.slice(1))
-      /\/^#[a-zа-яё0-9]{2,20}$/
-    ),
-    error: ' строка после решётки должна состоять из букв и чисел',
-  },
-  {
-    check: hashesArray.some((hash) => hash.length > MAX_HASH_LENGTH),
-    error: ` максимальная длина одного хэштега ${MAX_HASH_LENGTH} символов, включая решётку`,
-  },
-  {
-    check: hashesArray.length > MAX_NUMBER_HASHES,
-    error: ` нельзя указать больше ${MAX_NUMBER_HASHES} хэштегов`,
-  },
-  {
-    check: [...new Set(hashesArray)].length !== hashesArray.length,
-    error: ' один и тот же хэштег не может быть использован дважды',
-  },
-];*/
