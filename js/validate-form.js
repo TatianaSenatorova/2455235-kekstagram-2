@@ -55,7 +55,6 @@ const getHashesArray = (value) =>
   value.trim().toLowerCase().split(' ').filter(Boolean);
 
 const getHashesErrorMessage = () => HashErrorsText.HASH_ERROR;
-
 const validateHashes = (value) => {
   if(!value) {
     return true;
@@ -66,19 +65,15 @@ const validateHashes = (value) => {
   return hashesArray.every((hash) => regex.test(hash));
 };
 
-const hashesAmountMessage = () => HashErrorsText.AMOUNT_ERROR;
-
+const getHashesAmountMessage = () => HashErrorsText.AMOUNT_ERROR;
 const validateHashesAmount = () => hashesArray.length <= 5;
 
-const hashesUniqueMessage = () => HashErrorsText.UNIQUE_ERROR;
-
+const getHashesUniqueMessage = () => HashErrorsText.UNIQUE_ERROR;
 const validateUniqueHashes = () => [...new Set(hashesArray)].length === hashesArray.length;
 
 pristine.addValidator(imgHashtags, validateHashes, getHashesErrorMessage);
-pristine.addValidator(imgHashtags, validateHashesAmount, hashesAmountMessage
-);
-pristine.addValidator(imgHashtags, validateUniqueHashes, hashesUniqueMessage
-);
+pristine.addValidator(imgHashtags, validateHashesAmount, getHashesAmountMessage);
+pristine.addValidator(imgHashtags, validateUniqueHashes, getHashesUniqueMessage);
 pristine.addValidator(imgComments, validateComment, getCommentErrorMessage);
 
 const blockSubmitButton = (isBlocked = true) => {
