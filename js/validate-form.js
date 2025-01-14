@@ -80,38 +80,28 @@ const blockSubmitButton = (isBlocked = true) => {
   submitButton.disabled = isBlocked;
 };
 
-const checkIsInfo = () => {
-  infoRequestElement = infoRequestElement.toUpperCase();
-  return document.querySelector(
-    `.${RequestResultTags[infoRequestElement].section}`
-  );
-};
-
-const onBodyClick = (evt) => {
-  const isInfo = checkIsInfo();
-  if (!isInfo) {
-    return;
-  }
-  if (
-    evt.target.classList.contains(
-      RequestResultTags[infoRequestElement].button
-    ) ||
-    !evt.target.classList.contains(RequestResultTags[infoRequestElement].inner)
-  ) {
-    isInfo.remove();
-    body.removeEventListener('click', onBodyClick);
-  }
-};
-
-const onBodyKeydown = (evt) => {
-  const isInfo = checkIsInfo();
-  if (!isInfo && !isEscapeKey(evt)) {
+const closeInfoWindow = (evt) => {
+  const infoRequestResult = infoRequestElement.toUpperCase();
+  const infoSection = document.querySelector(`.${RequestResultTags[infoRequestResult].section}`);
+  if (!infoSection && !isEscapeKey(evt)) {
     return;
   }
   if (infoRequestElement.toLowerCase() === 'error') {
     evt.stopPropagation();
   }
-  isInfo.remove();
+  if (evt.target.classList.contains(RequestResultTags[infoRequestResult].button) || !evt.target.classList.contains(RequestResultTags[infoRequestResult].inner)
+  ) {
+    infoSection.remove();
+  }
+};
+
+const onBodyClick = (evt) => {
+  closeInfoWindow(evt);
+  body.removeEventListener('click', onBodyClick);
+};
+
+const onBodyKeydown = (evt) => {
+  closeInfoWindow(evt);
   body.removeEventListener('keydown', onBodyKeydown);
 };
 
@@ -127,7 +117,7 @@ const setUserFormSubmit = (cb) => {
     evt.preventDefault();
     if (pristine.validate()) {
       blockSubmitButton();
-      sendData(new FormData(evt.target))
+      sendData('new FormData(evt.target)')
         .then(() => appendInfo(ErrorIdTemplates.SUCCESS))
         .then(() => cb())
         .catch(() => appendInfo(ErrorIdTemplates.SEND_ERROR))
