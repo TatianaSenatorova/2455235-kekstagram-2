@@ -37,8 +37,9 @@ const showRequestInfo = (templateId) => {
   const template = findTemplate(templateId);
   const infoElement = template.cloneNode(true);
   const isRemove = true;
+  const isClearForm = false;
   document.body.append(infoElement);
-  setControl(() => closePopup(infoElement, isRemove));
+  setControl(() => closePopup(infoElement, isRemove), isClearForm);
   infoElement.addEventListener('click', ({target}) =>{
     if(target.classList.contains(`${templateId}`) || target.classList.contains(`${templateId}__button`)) {
       closePopup(infoElement);

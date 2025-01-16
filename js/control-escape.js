@@ -2,11 +2,16 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const stack = [];
 let listener = null;
-let localCounter = 0;
 
 function onDocumentKeydown(evt) {
   if (isEscapeKey(evt)) {
     const index = stack.length - 1;
+    if(stack[index].condition && !stack[index].condition()) {
+      return;
+    }
+    if(stack[index].clearForm) {
+      stack[index].clearForm();
+    }
     stack[index].cb();
     stack.length = stack.length - 1;
     if (!stack.length) {
@@ -14,12 +19,13 @@ function onDocumentKeydown(evt) {
       listener = null;
     }
   }
+  console.log(stack);
 }
-const setControl = (cb) => {
-  localCounter++;
+const setControl = (cb, clearForm, condition = null) => {
   stack.push({
-    n: localCounter,
-    cb
+    cb,
+    condition,
+    clearForm
   });
   if (!listener) {
     listener = document.addEventListener('keydown', onDocumentKeydown);
@@ -32,8 +38,8 @@ const removeControl = () => {
   if (!stack.length) {
     document.removeEventListener('keydown', onDocumentKeydown);
     listener = null;
-}
-console.log(stack);
+  }
+  console.log(stack);
 };
 
 export { setControl, removeControl };

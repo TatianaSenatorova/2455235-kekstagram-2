@@ -31,16 +31,16 @@ const buttonMoreComments = bigPicture.querySelector('.comments-loader');
 let indexCounter = 0;
 let commentsData = [];
 
-const openBigPhoto = () => {
-  openPopup(bigPicture);
-  setControl(() => closePopup(bigPicture, false));
-};
-
 const clearComments = () => {
   commentsList.innerHTML = '';
   buttonMoreComments.classList.remove('hidden');
   commentsData = [];
   indexCounter = 0;
+};
+
+const openBigPhoto = () => {
+  openPopup(bigPicture);
+  setControl(() => closePopup(bigPicture, false), clearComments);
 };
 
 function onBigPictureCloseClick() {
