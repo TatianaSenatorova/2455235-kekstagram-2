@@ -1,7 +1,15 @@
 import { picturesContainer } from './render-photos.js';
-import { isEscapeKey } from './utils.js';
+import { OPEN_COMMENTS_ON_CLICK } from './constants.js';
+import {
+  setControl,
+  removeControl
+} from './control-escape.js';
+import {
+  openPopup,
+  closePopup
+} from './utils.js';
 
-const OPEN_COMMENTS_ON_CLICK = 5;
+
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureClose = bigPicture.querySelector('.big-picture__cancel');
 const body = document.body;
@@ -23,17 +31,9 @@ const buttonMoreComments = bigPicture.querySelector('.comments-loader');
 let indexCounter = 0;
 let commentsData = [];
 
-const onDocumentKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    onBigPictureCloseClick();
-  }
-};
-
 const openBigPhoto = () => {
-  bigPicture.classList.remove('hidden');
-  body.classList.add('modal-open');
-  document.addEventListener('keydown', onDocumentKeydown);
+  openPopup(bigPicture);
+  setControl(() => closePopup(bigPicture, false));
 };
 
 const clearComments = () => {
@@ -44,10 +44,9 @@ const clearComments = () => {
 };
 
 function onBigPictureCloseClick() {
-  bigPicture.classList.add('hidden');
-  body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onDocumentKeydown);
   clearComments();
+  closePopup(bigPicture, false);
+  removeControl();
 }
 
 const getBigPicture = (cb) => {

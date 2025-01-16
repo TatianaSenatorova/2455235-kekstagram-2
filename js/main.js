@@ -1,14 +1,20 @@
 import { renderThumbnails } from './render-photos.js';
-import { getBigPicture, renderFullPhoto } from './open-full-photo.js';
-import { setUserFormSubmit } from './validate-form.js';
-import { onUploadCloseClick } from './open-form.js';
+import {
+  getBigPicture,
+  renderFullPhoto
+} from './open-full-photo.js';
+import './open-form.js';
 import './effects-photo.js';
-import { getData, ErrorIdTemplates } from './api.js';
+import { getData,
+  ErrorIdTemplates
+} from './api.js';
 import { showRequestInfoTimeout } from './utils.js';
-import { showFilters, setFilters } from './filters.js';
+import {
+  showFilters,
+  setFilters
+} from './filters.js';
 import './upload-photo.js';
-
-const PHOTO_ITEMS_NUMBER = 25;
+import { PHOTO_ITEMS_NUMBER } from './constants.js';
 
 getData()
   .then((photos) => {
@@ -21,5 +27,3 @@ getData()
   .catch(() => {
     showRequestInfoTimeout(ErrorIdTemplates.LOAD_ERROR);
   });
-
-setUserFormSubmit(onUploadCloseClick);

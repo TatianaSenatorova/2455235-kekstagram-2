@@ -1,20 +1,12 @@
 import { renderThumbnails } from './render-photos.js';
 import { debounce } from './utils.js';
-
-const Filters = {
-  DEFAULT: 'filter-default',
-  RANDOM: 'filter-random',
-  DISCUSSED: 'filter-discussed'
-};
-
-const SORT_FUNCTIONS = {
-  getRandom: () => 0.5 - Math.random(),
-  getDiscussed: (a,b) => b.comments.length - a.comments.length
-};
-
-const ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
-const PHOTO_NUMBERS_DEFAULT = 25;
-const PHOTO_NUMBERS_RANDOM = 10;
+import {
+  Filters,
+  SORT_FUNCTIONS,
+  ACTIVE_BUTTON_CLASS,
+  PHOTO_NUMBERS_DEFAULT,
+  PHOTO_NUMBERS_RANDOM,
+} from './constants.js';
 
 const filters = document.querySelector('.img-filters');
 const filtersButtons = filters.querySelectorAll('.img-filters__button');

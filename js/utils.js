@@ -1,5 +1,12 @@
-const ALERT_SHOW_TIME = 5000;
-const DEBOUNCE_DELAY = 500;
+import {
+  ALERT_SHOW_TIME,
+  DEBOUNCE_DELAY
+} from './constants.js';
+import {
+  setControl,
+  removeControl
+} from './control-escape.js';
+import { body } from './open-full-photo.js';
 
 const findTemplate = (id) => {
   const template = document.getElementById(id);
@@ -12,15 +19,33 @@ const findTemplate = (id) => {
   return template.content.firstElementChild;
 };
 
-const isEscapeKey = (evt) => evt.key === 'Escape';
+const closePopup = (popupElement, isRemove) => {
+  if(isRemove) {
+    popupElement.remove();
+    return;
+  }
+  popupElement.classList.add('hidden');
+  body.classList.remove('modal-open');
+};
+
+const openPopup = (popupElement) => {
+  popupElement.classList.remove('hidden');
+  body.classList.add('modal-open');
+};
 
 const showRequestInfo = (templateId) => {
   const template = findTemplate(templateId);
-  const errorElement = template.cloneNode(true);
-  document.body.append(errorElement);
-  return errorElement;
+  const infoElement = template.cloneNode(true);
+  const isRemove = true;
+  document.body.append(infoElement);
+  setControl(() => closePopup(infoElement, isRemove));
+  infoElement.addEventListener('click', ({target}) =>{
+    if(target.classList.contains(`${templateId}`) || target.classList.contains(`${templateId}__button`)) {
+      closePopup(infoElement);
+      removeControl();
+    }
+  });
 };
-
 
 const showRequestInfoTimeout = (templateId, message) => {
   const template = findTemplate(templateId);
@@ -45,8 +70,9 @@ const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
 
 export {
   findTemplate,
-  isEscapeKey,
   showRequestInfo,
   showRequestInfoTimeout,
-  debounce
+  debounce,
+  openPopup,
+  closePopup
 };

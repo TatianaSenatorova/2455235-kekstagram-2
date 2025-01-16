@@ -1,53 +1,10 @@
-const SCALE_STEP = 25;
-
-const ScaleExtremums = {
-  MIN: '25%',
-  MAX: '100%',
-};
-
-const SliderDefaultValues = {
-  MIN: 0,
-  MAX: 100,
-  START: 100
-};
-
-const FilterEffects = {
-  CHROME:{
-    filter: 'grayscale',
-    unit: '',
-    ranges: [0, 1],
-    step: 0.1,
-  },
-  SEPIA: {
-    filter: 'sepia',
-    unit: '',
-    ranges: [0, 1],
-    step: 0.1,
-  },
-  MARVIN: {
-    filter: 'invert',
-    unit: '%',
-    ranges: [0, 100],
-    step: 1,
-  },
-  PHOBOS: {
-    filter: 'blur',
-    unit: 'px',
-    ranges: [0, 3],
-    step: 0.1,
-  },
-  HEAT: {
-    filter: 'brightness',
-    unit: '',
-    ranges: [1, 3],
-    step: 0.1,
-  },
-};
-
-const ScaleAction = {
-  INCREASE: '+',
-  DECREASE: '-'
-};
+import {
+  SCALE_STEP,
+  ScaleExtremums,
+  SliderDefaultValues,
+  FilterEffects,
+  ScaleAction,
+} from './constants.js';
 
 const imgUploadForm = document.querySelector('.img-upload__form');
 const scaleValue = imgUploadForm.querySelector('.scale__control--value');

@@ -1,8 +1,10 @@
-import { imgUploadForm, openUploadForm } from './open-form.js';
+import {
+  imgUploadForm,
+  openUploadForm
+} from './open-form.js';
 import { showRequestInfoTimeout } from './utils.js';
 import { ErrorIdTemplates } from './api.js';
-
-const FILE_TYPES = ['.jpg', '.jpeg', '.png'];
+import { FILE_TYPES } from './constants.js';
 
 const fileChooser = imgUploadForm.querySelector('.img-upload__input');
 const imgPhotoPreview = imgUploadForm.querySelector('.img-upload__preview img');
@@ -18,8 +20,8 @@ fileChooser.addEventListener('change', () => {
     imgPhotoPreview.src = url;
     effectsPreviews.forEach((effect) => {
       effect.style.backgroundImage = `url(${url})`;
-      openUploadForm();
     });
+    openUploadForm();
   } else{
     showRequestInfoTimeout(ErrorIdTemplates.LOAD_ERROR, 'Неверный тип файла');
   }
