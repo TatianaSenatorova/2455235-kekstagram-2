@@ -42,7 +42,7 @@ const showRequestInfo = (templateId) => {
   setControl(() => closePopup(infoElement, isRemove), isClearForm);
   infoElement.addEventListener('click', ({target}) =>{
     if(target.classList.contains(`${templateId}`) || target.classList.contains(`${templateId}__button`)) {
-      closePopup(infoElement);
+      closePopup(infoElement, isRemove);
       removeControl();
     }
   });

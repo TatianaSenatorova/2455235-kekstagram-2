@@ -33,16 +33,15 @@ const clearForm = () => {
   imgUploadForm.reset();
 };
 
-const canCloseForm = () => !(document.activeElement === imgHashtags
-  || document.activeElement === imgComments);
+const canCloseForm = () => !(document.activeElement === imgHashtags || document.activeElement === imgComments);
 
 const openUploadForm = () => {
   openPopup(imgUploadOverlay);
-  setControl(() => closePopup(imgUploadOverlay, false), onUploadCloseClick, canCloseForm);
+  const isRemove = false;
+  setControl(() => closePopup(imgUploadOverlay, isRemove), onUploadCloseClick, canCloseForm);
 };
 
 function onUploadCloseClick() {
-  console.log('123');
   closePopup(imgUploadOverlay, false);
   resetValidation();
   clearForm();
@@ -64,7 +63,7 @@ imgUploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   if (isValid()) {
     blockSubmitButton();
-    sendData('new FormData(evt.target)')
+    sendData(new FormData(evt.target))
       .then(() => {
         onUploadCloseClick();
         removeControl();

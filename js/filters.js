@@ -14,8 +14,6 @@ const filtersButtons = filters.querySelectorAll('.img-filters__button');
 let dataFilterId;
 let photos = [];
 
-const showFilters = () => filters.classList.remove('img-filters--inactive');
-
 const debounceRender = debounce(renderThumbnails);
 
 const getPhotosToRender = (filter) => {
@@ -35,10 +33,10 @@ const getPhotosToRender = (filter) => {
   debounceRender(photosToRender);
 };
 
-const onFilterClick = (evt) => {
-  if(evt.target.classList.contains('img-filters__button') && !evt.target.classList.contains(ACTIVE_BUTTON_CLASS)) {
+const onFilterClick = ({ target }) => {
+  if(target.classList.contains('img-filters__button') && !target.classList.contains(ACTIVE_BUTTON_CLASS)) {
     filtersButtons.forEach((button) => button.classList.remove(ACTIVE_BUTTON_CLASS));
-    const currentFilter = evt.target;
+    const currentFilter = target;
     currentFilter.classList.add(ACTIVE_BUTTON_CLASS);
     dataFilterId = currentFilter.getAttribute('id');
     getPhotosToRender(dataFilterId);
@@ -46,8 +44,9 @@ const onFilterClick = (evt) => {
 };
 
 const setFilters = (photosData) => {
+  filters.classList.remove('img-filters--inactive');
   filters.addEventListener('click', onFilterClick);
   photos = photosData;
 };
 
-export { showFilters, setFilters };
+export { setFilters };

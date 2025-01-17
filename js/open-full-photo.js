@@ -40,7 +40,8 @@ const clearComments = () => {
 
 const openBigPhoto = () => {
   openPopup(bigPicture);
-  setControl(() => closePopup(bigPicture, false), clearComments);
+  const isRemove = false;
+  setControl(() => closePopup(bigPicture, isRemove), clearComments);
 };
 
 function onBigPictureCloseClick() {

@@ -24,14 +24,14 @@ const changePhotoSize = (action, scaleData) => {
   scaleValue.setAttribute('value', `${newScaleValue}%`);
 };
 
-scale.addEventListener('click', (evt) => {
+scale.addEventListener('click', ({ target }) => {
   if (
-    evt.target.classList.contains('scale__control--smaller') &&
+    target.classList.contains('scale__control--smaller') &&
     scaleValue.value !== ScaleExtremums.MIN
   ) {
     changePhotoSize(ScaleAction.DECREASE, parseInt(scaleValue.value, 10));
   } else if (
-    evt.target.classList.contains('scale__control--bigger') &&
+    target.classList.contains('scale__control--bigger') &&
     scaleValue.value !== ScaleExtremums.MAX
   ) {
     changePhotoSize(ScaleAction.INCREASE, parseInt(scaleValue.value, 10));
@@ -63,14 +63,14 @@ const changePhotoStyle = (effect) => {
 };
 
 effectsRadioButtons.forEach((button) =>{
-  button.addEventListener('change', (evt) => {
+  button.addEventListener('change', ({ target }) => {
     imgUploadPreview.style.filter = 'unset';
-    if (evt.target.value !== 'none') {
+    if (target.value !== 'none') {
       sliderContainer.classList.remove('hidden');
-      const effect = evt.target.value;
+      const effect = target.value;
       effectLevelValue.setAttribute('data-effect', effect);
       updateSliderData(effect);
-    } else if (evt.target.value === 'none') {
+    } else if (target.value === 'none') {
       sliderContainer.classList.add('hidden');
     }
   });

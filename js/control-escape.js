@@ -19,8 +19,8 @@ function onDocumentKeydown(evt) {
       listener = null;
     }
   }
-  console.log(stack);
 }
+
 const setControl = (cb, clearForm, condition = null) => {
   stack.push({
     cb,
@@ -30,7 +30,6 @@ const setControl = (cb, clearForm, condition = null) => {
   if (!listener) {
     listener = document.addEventListener('keydown', onDocumentKeydown);
   }
-  console.log(stack);
 };
 
 const removeControl = () => {
@@ -39,7 +38,6 @@ const removeControl = () => {
     document.removeEventListener('keydown', onDocumentKeydown);
     listener = null;
   }
-  console.log(stack);
 };
 
 export { setControl, removeControl };
