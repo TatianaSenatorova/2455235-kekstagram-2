@@ -1,12 +1,6 @@
-import {
-  ALERT_SHOW_TIME,
-  DEBOUNCE_DELAY
-} from './constants.js';
-import {
-  setControl,
-  removeControl
-} from './control-escape.js';
-import { body } from './open-full-photo.js';
+import { ALERT_SHOW_TIME, DEBOUNCE_DELAY } from './constants.js';
+import { setControl, removeControl } from './control-escape.js';
+import { body } from './open-big-photo.js';
 
 const findTemplate = (id) => {
   const template = document.getElementById(id);
@@ -20,7 +14,7 @@ const findTemplate = (id) => {
 };
 
 const closePopup = (popupElement, isRemove) => {
-  if(isRemove) {
+  if (isRemove) {
     popupElement.remove();
     return;
   }
@@ -40,8 +34,11 @@ const showRequestInfo = (templateId) => {
   const isClearForm = false;
   document.body.append(infoElement);
   setControl(() => closePopup(infoElement, isRemove), isClearForm);
-  infoElement.addEventListener('click', ({target}) =>{
-    if(target.classList.contains(`${templateId}`) || target.classList.contains(`${templateId}__button`)) {
+  infoElement.addEventListener('click', ({ target }) => {
+    if (
+      target.classList.contains(`${templateId}`) ||
+      target.classList.contains(`${templateId}__button`)
+    ) {
       closePopup(infoElement, isRemove);
       removeControl();
     }
@@ -51,7 +48,7 @@ const showRequestInfo = (templateId) => {
 const showRequestInfoTimeout = (templateId, message) => {
   const template = findTemplate(templateId);
   const errorElement = template.cloneNode(true);
-  if(message) {
+  if (message) {
     errorElement.querySelector('.data-error__title').textContent = message;
   }
   document.body.append(errorElement);
@@ -75,5 +72,5 @@ export {
   showRequestInfoTimeout,
   debounce,
   openPopup,
-  closePopup
+  closePopup,
 };

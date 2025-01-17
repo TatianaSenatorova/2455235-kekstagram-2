@@ -1,13 +1,8 @@
 import { renderThumbnails } from './render-photos.js';
-import {
-  getBigPicture,
-  renderFullPhoto
-} from './open-full-photo.js';
+import { getBigPicture, renderFullPhoto } from './open-big-photo.js';
 import './open-form.js';
 import './effects-photo.js';
-import { getData,
-  ErrorIdTemplates
-} from './api.js';
+import { getData, ErrorIdTemplates } from './api.js';
 import { showRequestInfoTimeout } from './utils.js';
 import { setFilters } from './filters.js';
 import './upload-photo.js';
